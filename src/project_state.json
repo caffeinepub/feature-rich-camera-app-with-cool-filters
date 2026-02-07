@@ -1,0 +1,224 @@
+{
+  "schemaVersion": "1.0.0",
+  "projectStateVersion": 11,
+  "summary": "Build a camera application with many features, cool filters, and support for video recording.",
+  "architectural_notes": [],
+  "known_issues": [],
+  "isFixRequest": false,
+  "existing_features": [
+    {
+      "id": "feature-create-a-responsive-camera-screen-that-requests-camera-permission-shows-a-live-video-preview-and-supports-switching-between-available-cameras-front-back-where-supported-using-the-browser-mediadevices-api",
+      "title": "Create a responsive Camera screen that requests camera permission, shows a live video preview, and supports switching between available cameras (front/back where supported) using the browser MediaDevices API.",
+      "reqIds": [
+        "REQ-1"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-implement-photo-capture-from-the-live-preview-and-provide-core-capture-tools-countdown-timer-off-3s-10s-grid-overlay-toggle-mirror-toggle-useful-for-front-camera-and-basic-zoom-control-use-track-constraints-when-supported-otherwise-fallback-to-css-scaling",
+      "title": "Implement photo capture from the live preview and provide core capture tools: countdown timer (off/3s/10s), grid overlay toggle, mirror toggle (useful for front camera), and basic zoom control (use track constraints when supported; otherwise fallback to CSS scaling).",
+      "reqIds": [
+        "REQ-2"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-add-a-filters-adjustments-editor-for-captured-photos-with-a-non-trivial-set-of-cool-filters-and-adjustable-parameters-include-at-minimum-original-black-white-sepia-vintage-fade-neon-pop-cinematic-teal-orange-blur-sharpen-and-edge-sketch-provide-intensity-sliders-and-a-live-preview",
+      "title": "Add a Filters & Adjustments editor for captured photos with a non-trivial set of “cool” filters and adjustable parameters. Include at minimum: Original, Black & White, Sepia, Vintage Fade, Neon Pop, Cinematic (teal/orange), Blur, Sharpen, and Edge/Sketch. Provide intensity sliders and a live preview.",
+      "reqIds": [
+        "REQ-3"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-provide-creative-tools-on-top-of-filters-crop-with-aspect-ratio-presets-1-1-4-5-16-9-free-rotate-flip-and-a-simple-stickers-frames-system-a-small-built-in-set-of-vector-png-stickers-and-2-3-frames",
+      "title": "Provide creative tools on top of filters: crop with aspect ratio presets (1:1, 4:5, 16:9, free), rotate/flip, and a simple stickers/frames system (a small built-in set of vector/PNG stickers and 2–3 frames).",
+      "reqIds": [
+        "REQ-4"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-implement-an-in-app-gallery-that-lists-captured-edited-photos-allows-opening-a-photo-to-re-edit-supports-delete-and-supports-export-actions-download-as-png-jpeg-user-selectable-with-adjustable-quality-for-jpeg",
+      "title": "Implement an in-app Gallery that lists captured/edited photos, allows opening a photo to re-edit, supports delete, and supports export actions: download as PNG/JPEG (user selectable) with adjustable quality for JPEG.",
+      "reqIds": [
+        "REQ-5"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-persist-gallery-items-locally-in-the-browser-indexeddb-or-equivalent-so-that-photos-remain-available-after-refresh-reopen-and-include-storage-management-ui-showing-approximate-space-used-and-a-clear-all-option",
+      "title": "Persist gallery items locally in the browser (IndexedDB or equivalent) so that photos remain available after refresh/reopen, and include storage management UI showing approximate space used and a “Clear all” option.",
+      "reqIds": [
+        "REQ-6"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-connect-frontend-to-the-backend-metadata-endpoints-so-that-when-a-user-saves-exports-an-image-locally-a-metadata-record-is-also-created-on-the-canister-and-the-gallery-can-display-metadata-filter-name-date-dimensions",
+      "title": "Connect frontend to the backend metadata endpoints so that when a user saves/exports an image locally, a metadata record is also created on the canister, and the Gallery can display metadata (filter name, date, dimensions).",
+      "reqIds": [
+        "REQ-8"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-define-and-apply-a-coherent-distinct-visual-theme-for-the-app-colors-typography-spacing-and-component-styling-suitable-for-a-modern-creative-camera-studio-experience-and-enforce-it-consistently-across-camera-editor-and-gallery-screens",
+      "title": "Define and apply a coherent, distinct visual theme for the app (colors, typography, spacing, and component styling) suitable for a modern “creative camera studio” experience, and enforce it consistently across Camera, Editor, and Gallery screens.",
+      "reqIds": [
+        "REQ-9"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-add-basic-ux-robustness-clear-empty-states-loading-states-for-camera-initialization-and-error-handling-for-unsupported-browsers-no-camera-api-permission-denial-and-missing-devices",
+      "title": "Add basic UX robustness: clear empty states, loading states for camera initialization, and error handling for unsupported browsers (no camera API), permission denial, and missing devices.",
+      "reqIds": [
+        "REQ-10"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-add-a-simple-onboarding-help-modal-that-briefly-explains-granting-permission-switching-camera-capturing-applying-filters-saving-exporting-and-where-photos-are-stored-local-browser-storage",
+      "title": "Add a simple onboarding/help modal that briefly explains: granting permission, switching camera, capturing, applying filters, saving/exporting, and where photos are stored (local browser storage).",
+      "reqIds": [
+        "REQ-11"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-render-generated-static-image-assets-logo-and-subtle-background-from-frontend-public-assets-generated-and-use-them-in-the-ui-e-g-app-header-logo-and-or-decorative-background-without-routing-images-through-the-backend",
+      "title": "Render generated static image assets (logo and subtle background) from frontend/public/assets/generated and use them in the UI (e.g., app header logo and/or decorative background) without routing images through the backend.",
+      "reqIds": [
+        "REQ-12"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-add-a-new-beauty-effect-in-the-editor-that-makes-the-photo-look-whiter-and-smoother-with-separate-user-controls-for-1-skin-smoothing-and-2-whitening",
+      "title": "Add a new \"Beauty\" effect in the Editor that makes the photo look whiter and smoother, with separate user controls for (1) skin smoothing and (2) whitening.",
+      "reqIds": [
+        "REQ-13"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-implement-a-new-mask-overlay-feature-in-the-editor-that-lets-the-user-place-a-decorative-face-mask-style-png-overlay-on-top-of-the-photo-with-basic-controls",
+      "title": "Implement a new \"Mask\" overlay feature in the Editor that lets the user place a decorative face-mask style PNG overlay on top of the photo with basic controls.",
+      "reqIds": [
+        "REQ-14"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-refactor-the-canvas-rendering-pipeline-so-filters-can-accept-additional-parameters-beyond-a-single-intensity-value-to-support-beauty-smoothing-whitening-while-keeping-existing-filters-working",
+      "title": "Refactor the canvas rendering pipeline so filters can accept additional parameters beyond a single intensity value (to support Beauty smoothing/whitening while keeping existing filters working).",
+      "reqIds": [
+        "REQ-15"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-update-the-in-app-help-modal-copy-to-mention-the-new-beauty-effect-whitening-smoothing-and-the-mask-overlay-feature-in-clear-english",
+      "title": "Update the in-app Help modal copy to mention the new Beauty effect (whitening + smoothing) and the Mask overlay feature in clear English.",
+      "reqIds": [
+        "REQ-16"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-add-the-required-static-mask-overlay-png-assets-to-the-project-under-frontend-public-assets-generated-and-load-them-directly-from-the-frontend-no-backend-routing",
+      "title": "Add the required static mask overlay PNG assets to the project under frontend/public/assets/generated and load them directly from the frontend (no backend routing).",
+      "reqIds": [
+        "REQ-17"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-update-the-camera-screen-layout-on-small-mobile-viewports-to-look-cleaner-and-closer-to-a-native-phone-camera-experience-by-prioritizing-a-full-screen-or-near-full-screen-live-preview-with-thumb-friendly-overlay-controls-while-keeping-the-existing-camera-features-switch-camera-timer-grid-mirror-zoom-gallery",
+      "title": "Update the Camera screen layout on small/mobile viewports to look cleaner and closer to a native phone camera experience by prioritizing a full-screen (or near full-screen) live preview with thumb-friendly overlay controls, while keeping the existing camera features (switch camera, timer, grid, mirror, zoom, gallery).",
+      "reqIds": [
+        "REQ-18"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-adjust-global-app-chrome-for-mobile-camera-usability-by-reducing-distractions-on-the-camera-screen-e-g-header-footer-density-and-spacing-while-preserving-navigation-and-maintaining-current-behavior-on-larger-screens",
+      "title": "Adjust global app chrome for mobile camera usability by reducing distractions on the Camera screen (e.g., header/footer density and spacing) while preserving navigation and maintaining current behavior on larger screens.",
+      "reqIds": [
+        "REQ-19"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-add-a-video-capture-mode-to-the-camera-screen-that-records-video-from-the-live-camera-preview-using-browser-recording-capabilities-e-g-mediarecorder-with-clear-start-stop-controls-and-recording-state-ui",
+      "title": "Add a Video capture mode to the Camera screen that records video from the live camera preview using browser recording capabilities (e.g., MediaRecorder), with clear Start/Stop controls and recording state UI.",
+      "reqIds": [
+        "REQ-20"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-persist-recorded-videos-locally-in-the-browser-indexeddb-or-equivalent-alongside-existing-photos-so-that-videos-remain-available-after-refresh-reopen-including-storage-size-calculation-updates",
+      "title": "Persist recorded videos locally in the browser (IndexedDB or equivalent) alongside existing photos so that videos remain available after refresh/reopen, including storage size calculation updates.",
+      "reqIds": [
+        "REQ-21"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-update-the-gallery-screen-to-support-listing-previewing-and-exporting-recorded-videos-in-addition-to-photos",
+      "title": "Update the Gallery screen to support listing, previewing, and exporting recorded videos in addition to photos.",
+      "reqIds": [
+        "REQ-22"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-update-the-in-app-help-modal-copy-to-mention-how-to-record-videos-switch-to-video-mode-start-stop-recording-where-videos-are-stored-and-how-to-export-them-in-clear-english",
+      "title": "Update the in-app Help modal copy to mention how to record videos (switch to Video mode, start/stop recording, where videos are stored, and how to export them), in clear English.",
+      "reqIds": [
+        "REQ-23"
+      ],
+      "version": 1
+    }
+  ],
+  "new_feature_requests": [
+    {
+      "id": "AR-1",
+      "summary": "Create a camera app with many features and cool filters.",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-8",
+      "summary": "Add an optional backend feature to persist photo metadata (not required to store full image bytes): store records for saved photos containing id, createdAt, filename, format, dimensions, appliedFilter name, and adjustment parameters. Provide query endpoints to list records with pagination and delete by id.",
+      "reqIds": [
+        "REQ-7"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-9",
+      "summary": "Add a face mask/overlay filter and a beauty effect that makes the face look whiter and smoother (skin smoothing + whitening controls).",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-10",
+      "summary": "Improve the mobile-mode UI layout to look cleaner and more like a native phone camera app experience.",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-11",
+      "summary": "Add a video feature (record video from the live camera preview, with basic start/stop controls and saving/exporting).",
+      "reqIds": [],
+      "status": "pending"
+    }
+  ],
+  "gameProjectType": "none",
+  "projectName": "Feature-rich Camera App with Cool Filters",
+  "clarification_mode": "instant",
+  "clarification_rounds": 0
+}

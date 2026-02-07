@@ -1,2 +1,3 @@
-# feature-rich-camera-app-with-cool-filters
-Exported from Caffeine project: Feature-rich Camera App with Cool Filters
+## 
+
+To run app build and run docker image: `docker build -t app . docker run -it --network host app`

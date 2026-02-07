@@ -1,0 +1,86 @@
+{
+  "kind": "coverage_report",
+  "version": "1.0",
+  "generatedAt": "2026-02-07T12:07:52.385Z",
+  "sources": {
+    "buildRequest": true,
+    "implementationPlan": true
+  },
+  "requirements": {
+    "total": 4,
+    "implemented": 4,
+    "items": [
+      {
+        "id": "REQ-20",
+        "summary": "Add a Video capture mode to the Camera screen that records video from the live camera preview using browser recording capabilities (e.g., MediaRecorder), with clear Start/Stop controls and recording state UI.",
+        "status": "implemented",
+        "plannedFiles": [
+          "frontend/src/hooks/useVideoRecorder.ts",
+          "frontend/src/pages/CameraScreen.tsx",
+          "frontend/src/components/camera/MobileCameraOverlay.tsx"
+        ],
+        "matchedFiles": [
+          "frontend/src/hooks/useVideoRecorder.ts",
+          "frontend/src/pages/CameraScreen.tsx",
+          "frontend/src/components/camera/MobileCameraOverlay.tsx"
+        ]
+      },
+      {
+        "id": "REQ-21",
+        "summary": "Persist recorded videos locally in the browser (IndexedDB or equivalent) alongside existing photos so that videos remain available after refresh/reopen, including storage size calculation updates.",
+        "status": "implemented",
+        "plannedFiles": [
+          "frontend/src/App.tsx",
+          "frontend/src/lib/storage.ts",
+          "frontend/src/pages/CameraScreen.tsx"
+        ],
+        "matchedFiles": [
+          "frontend/src/App.tsx",
+          "frontend/src/lib/storage.ts",
+          "frontend/src/pages/CameraScreen.tsx"
+        ]
+      },
+      {
+        "id": "REQ-22",
+        "summary": "Update the Gallery screen to support listing, previewing, and exporting recorded videos in addition to photos.",
+        "status": "implemented",
+        "plannedFiles": [
+          "frontend/src/pages/GalleryScreen.tsx",
+          "frontend/src/lib/storage.ts"
+        ],
+        "matchedFiles": [
+          "frontend/src/pages/GalleryScreen.tsx",
+          "frontend/src/lib/storage.ts"
+        ]
+      },
+      {
+        "id": "REQ-23",
+        "summary": "Update the in-app Help modal copy to mention how to record videos (switch to Video mode, start/stop recording, where videos are stored, and how to export them), in clear English.",
+        "status": "implemented",
+        "plannedFiles": [
+          "frontend/src/components/HelpModal.tsx"
+        ],
+        "matchedFiles": [
+          "frontend/src/components/HelpModal.tsx"
+        ]
+      }
+    ]
+  },
+  "changedFiles": [
+    "build-request.json",
+    "feature_evidence.json",
+    "frontend-file-summaries.txt",
+    "frontend-implementation-plan.json",
+    "frontend/src/App.tsx",
+    "frontend/src/components/HelpModal.tsx",
+    "frontend/src/components/camera/MobileCameraOverlay.tsx",
+    "frontend/src/hooks/useVideoRecorder.ts",
+    "frontend/src/lib/storage.ts",
+    "frontend/src/pages/CameraScreen.tsx",
+    "frontend/src/pages/GalleryScreen.tsx",
+    "project_state.json",
+    "scratch/component-selection.json",
+    "spec.md",
+    "spec_vs_diff_report.json"
+  ]
+}

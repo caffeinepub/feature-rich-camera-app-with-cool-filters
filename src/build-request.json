@@ -1,0 +1,96 @@
+{
+  "kind": "build_request",
+  "title": "Add in-app video recording, saving, and gallery playback/export",
+  "priority": "normal",
+  "requirements": [
+    {
+      "id": "REQ-20",
+      "text": "Add a Video capture mode to the Camera screen that records video from the live camera preview using browser recording capabilities (e.g., MediaRecorder), with clear Start/Stop controls and recording state UI.",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-6"
+        ],
+        "quotes": [
+          "saya ingin ada fitur video"
+        ]
+      },
+      "acceptanceCriteria": [
+        "On the Camera screen, the user can switch between Photo and Video capture modes.",
+        "In Video mode, the user can start recording and then stop recording, producing a playable recorded video.",
+        "While recording, the UI clearly indicates recording is active (e.g., red indicator and/or elapsed time), and prevents conflicting actions (e.g., photo countdown capture) as appropriate.",
+        "If video recording is not supported by the browser/device, the app shows a clear, user-friendly error message in English and does not crash."
+      ]
+    },
+    {
+      "id": "REQ-21",
+      "text": "Persist recorded videos locally in the browser (IndexedDB or equivalent) alongside existing photos so that videos remain available after refresh/reopen, including storage size calculation updates.",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-6"
+        ],
+        "quotes": [
+          "saya ingin ada fitur video"
+        ]
+      },
+      "acceptanceCriteria": [
+        "After stopping a recording, the user can save the video to the in-app gallery using the app’s existing save/gallery flow (or an equivalent explicit save action).",
+        "Recorded videos are stored locally and appear in the gallery after a page refresh.",
+        "The storage management UI continues to work and includes video storage in its space-used calculation.",
+        "Existing saved photos remain readable and are not lost after introducing video persistence."
+      ]
+    },
+    {
+      "id": "REQ-22",
+      "text": "Update the Gallery screen to support listing, previewing, and exporting recorded videos in addition to photos.",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-6"
+        ],
+        "quotes": [
+          "saya ingin ada fitur video"
+        ]
+      },
+      "acceptanceCriteria": [
+        "The gallery grid displays video items distinctly from photos (e.g., a video badge/overlay).",
+        "Selecting a video opens a detail view that plays the video with standard controls (play/pause/seek/volume).",
+        "The user can export/download a recorded video file from the gallery.",
+        "The user can delete individual videos and “Clear All” removes both photos and videos."
+      ]
+    },
+    {
+      "id": "REQ-23",
+      "text": "Update the in-app Help modal copy to mention how to record videos (switch to Video mode, start/stop recording, where videos are stored, and how to export them), in clear English.",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-6"
+        ],
+        "quotes": [
+          "saya ingin ada fitur video"
+        ]
+      },
+      "acceptanceCriteria": [
+        "Help content includes a section or updates existing sections to explain video recording start/stop and Video mode selection.",
+        "Help content explicitly states that videos are stored locally in the browser (consistent with existing photo storage messaging).",
+        "All new/updated help text is in English and matches the app’s tone/style."
+      ]
+    }
+  ],
+  "constraints": [
+    "Frontend immutable paths must not be edited: frontend/src/hooks/useInternetIdentity.ts, frontend/src/hooks/useInternetIdentity.tsx, frontend/src/hooks/useActor.ts, frontend/src/main.tsx, frontend/src/components/ui.",
+    "Do not add external databases or third-party backend services; local persistence must remain browser-based (IndexedDB or equivalent).",
+    "Backend remains single-actor Motoko; do not introduce backend video byte storage unless explicitly requested later."
+  ],
+  "nonGoals": [
+    "Video editing features (filters on video, trimming, stitching, adding stickers/masks to video).",
+    "Uploading/storing video files on the backend canister.",
+    "Real-time streaming or WebSocket-based video features."
+  ],
+  "imageRequirements": {
+    "required": [],
+    "edits": []
+  }
+}

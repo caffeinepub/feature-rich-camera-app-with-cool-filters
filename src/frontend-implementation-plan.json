@@ -1,0 +1,99 @@
+{
+  "kind": "implementation_plan",
+  "version": "1.0",
+  "title": "Add in-app video recording with local persistence and gallery playback/export",
+  "requirements": [
+    {
+      "id": "REQ-20",
+      "summary": "Add a Video capture mode on the Camera screen using browser recording (MediaRecorder) with Start/Stop controls, recording state UI, and graceful unsupported handling.",
+      "acceptanceCriteria": [
+        "On the Camera screen, the user can switch between Photo and Video capture modes.",
+        "In Video mode, the user can start recording and then stop recording, producing a playable recorded video.",
+        "While recording, the UI clearly indicates recording is active (e.g., red indicator and/or elapsed time), and prevents conflicting actions (e.g., photo countdown capture) as appropriate.",
+        "If video recording is not supported by the browser/device, the app shows a clear, user-friendly error message in English and does not crash."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/hooks/useVideoRecorder.ts",
+          "operation": "create",
+          "description": "Create a dedicated React hook to manage MediaRecorder lifecycle (start/stop), chunk collection, elapsed-time tracking, and producing a playable Blob/URL from the live camera stream. Include capability checks for MediaRecorder support and clear error messages for unsupported environments."
+        },
+        {
+          "path": "frontend/src/pages/CameraScreen.tsx",
+          "operation": "modify",
+          "description": "Add Photo/Video mode switching and integrate video recording by reading the active camera stream from the existing camera preview (use the selected \"camera\" component hook useCamera for camera preview/stream access; verify the component's usage instructions before implementing). Wire Start/Stop recording actions, disable conflicting photo actions while recording (e.g., countdown/capture), and show a prominent recording state UI (red indicator + elapsed time). Display a user-friendly English error if MediaRecorder/video recording is unsupported."
+        },
+        {
+          "path": "frontend/src/components/camera/MobileCameraOverlay.tsx",
+          "operation": "modify",
+          "description": "Extend the camera controls UI to support switching between Photo and Video modes and to show appropriate controls per mode (e.g., Start/Stop recording button in Video mode; photo shutter in Photo mode). Add a clear recording indicator and elapsed time display while recording, and ensure disabled states prevent conflicting interactions."
+        }
+      ]
+    },
+    {
+      "id": "REQ-21",
+      "summary": "Persist recorded videos locally in IndexedDB alongside photos, including updated storage size calculation and safe migration so existing photos remain readable.",
+      "acceptanceCriteria": [
+        "After stopping a recording, the user can save the video to the in-app gallery using the app’s existing save/gallery flow (or an equivalent explicit save action).",
+        "Recorded videos are stored locally and appear in the gallery after a page refresh.",
+        "The storage management UI continues to work and includes video storage in its space-used calculation.",
+        "Existing saved photos remain readable and are not lost after introducing video persistence."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/App.tsx",
+          "operation": "modify",
+          "description": "Add and export a Video media type (and/or a shared union type for gallery items) so videos can be represented consistently in storage and gallery without affecting existing photo editing flows."
+        },
+        {
+          "path": "frontend/src/lib/storage.ts",
+          "operation": "modify",
+          "description": "Extend IndexedDB helpers to also save/retrieve/delete/clear recorded videos in addition to existing photos. Add a safe DB version upgrade/migration strategy that keeps the existing photos store intact (or migrates without data loss). Update storage size calculation to include both photo data URLs and persisted video blobs so the gallery storage UI reflects total usage."
+        },
+        {
+          "path": "frontend/src/pages/CameraScreen.tsx",
+          "operation": "modify",
+          "description": "After stopping a recording, provide an explicit Save-to-Gallery action (e.g., preview + Save/Discard) that persists the recorded video via the updated storage helpers and then navigates to (or makes available in) the gallery."
+        }
+      ]
+    },
+    {
+      "id": "REQ-22",
+      "summary": "Update the Gallery screen to list photos and videos, show distinct video items, support video playback in detail view, enable download/export, and allow deleting/clearing all media.",
+      "acceptanceCriteria": [
+        "The gallery grid displays video items distinctly from photos (e.g., a video badge/overlay).",
+        "Selecting a video opens a detail view that plays the video with standard controls (play/pause/seek/volume).",
+        "The user can export/download a recorded video file from the gallery.",
+        "The user can delete individual videos and “Clear All” removes both photos and videos."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/pages/GalleryScreen.tsx",
+          "operation": "modify",
+          "description": "Update gallery loading to combine photos and videos from local storage, sort together by timestamp, and render a mixed grid. Add a distinct visual treatment for video tiles (badge/overlay). Update the detail modal to conditionally render an HTML video player with standard controls for video items, and preserve existing photo detail behavior. Implement export/download for videos (Blob to downloadable file) and ensure delete and Clear All remove both photos and videos."
+        },
+        {
+          "path": "frontend/src/lib/storage.ts",
+          "operation": "modify",
+          "description": "Add/adjust helper functions used by the gallery for mixed-media listing (photos + videos), exporting support data (e.g., retrieving video blob/mime type), and unified delete/clear-all across both stores."
+        }
+      ]
+    },
+    {
+      "id": "REQ-23",
+      "summary": "Update Help modal copy to explain how to record, where videos are stored locally, and how to export them, in clear English.",
+      "acceptanceCriteria": [
+        "Help content includes a section or updates existing sections to explain video recording start/stop and Video mode selection.",
+        "Help content explicitly states that videos are stored locally in the browser (consistent with existing photo storage messaging).",
+        "All new/updated help text is in English and matches the app’s tone/style."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/components/HelpModal.tsx",
+          "operation": "modify",
+          "description": "Update Help modal sections to include clear English instructions for Video mode (switch to Video, Start/Stop recording), where recordings are stored (locally in the browser via IndexedDB), and how to export/download videos from the Gallery. Keep tone consistent with existing help copy."
+        }
+      ]
+    }
+  ]
+}
