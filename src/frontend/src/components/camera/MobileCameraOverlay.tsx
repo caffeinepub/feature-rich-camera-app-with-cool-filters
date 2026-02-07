@@ -1,9 +1,9 @@
-import { SwitchCamera, Grid3x3, Timer, Maximize, Image as ImageIcon, FlipHorizontal2, Video as VideoIcon, Camera } from 'lucide-react';
+import { SwitchCamera, Grid3x3, Timer, Maximize, Image as ImageIcon, FlipHorizontal2, Video as VideoIcon, Camera, Radio } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Slider } from '@/components/ui/slider';
 
-type CaptureMode = 'photo' | 'video';
+type CaptureMode = 'photo' | 'video' | 'live';
 
 interface MobileCameraOverlayProps {
   isActive: boolean;
@@ -82,6 +82,15 @@ export default function MobileCameraOverlay({
                   >
                     <VideoIcon className="w-4 h-4" />
                     Video
+                  </Button>
+                  <Button
+                    variant={captureMode === 'live' ? 'default' : 'outline'}
+                    className="flex-1 gap-2"
+                    onClick={() => onCaptureModeChange('live')}
+                    disabled={isRecording}
+                  >
+                    <Radio className="w-4 h-4" />
+                    Live
                   </Button>
                 </div>
               </div>
@@ -202,6 +211,15 @@ export default function MobileCameraOverlay({
                 className={`h-8 px-3 rounded-full text-xs ${captureMode === 'video' ? '' : 'text-white hover:text-white hover:bg-white/20'}`}
               >
                 <VideoIcon className="w-4 h-4" />
+              </Button>
+              <Button
+                variant={captureMode === 'live' ? 'default' : 'ghost'}
+                size="sm"
+                onClick={() => onCaptureModeChange('live')}
+                disabled={isRecording}
+                className={`h-8 px-3 rounded-full text-xs ${captureMode === 'live' ? '' : 'text-white hover:text-white hover:bg-white/20'}`}
+              >
+                <Radio className="w-4 h-4" />
               </Button>
             </div>
           )}

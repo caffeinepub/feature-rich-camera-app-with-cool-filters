@@ -8,10 +8,58 @@
 
 import { IDL } from '@icp-sdk/core/candid';
 
-export const idlService = IDL.Service({});
+export const SessionId = IDL.Nat;
+export const Candidate = IDL.Record({
+  'usernameFragment' : IDL.Opt(IDL.Text),
+  'candidate' : IDL.Text,
+  'sdpMid' : IDL.Opt(IDL.Text),
+  'sdpMLineIndex' : IDL.Opt(IDL.Nat),
+});
+export const Candidates = IDL.Vec(Candidate);
+export const UserId = IDL.Text;
+export const Offer = IDL.Record({ 'sdp' : IDL.Text, 'type' : IDL.Text });
+
+export const idlService = IDL.Service({
+  'addBroadcasterCandidates' : IDL.Func([SessionId, Candidates], [], []),
+  'addViewerCandidates' : IDL.Func([SessionId, UserId, Candidates], [], []),
+  'getBroadcasterCandidates' : IDL.Func([SessionId, UserId], [Candidates], []),
+  'getOffer' : IDL.Func([SessionId, UserId], [Offer], []),
+  'getViewerCandidates' : IDL.Func([SessionId, UserId], [Candidates], []),
+  'joinAsViewer' : IDL.Func([SessionId, UserId], [], []),
+  'sendAnswer' : IDL.Func([SessionId, UserId, Offer], [], []),
+  'shouldFinish' : IDL.Func([SessionId], [IDL.Bool], ['query']),
+  'startBroadcast' : IDL.Func([UserId, Offer], [], []),
+});
 
 export const idlInitArgs = [];
 
-export const idlFactory = ({ IDL }) => { return IDL.Service({}); };
+export const idlFactory = ({ IDL }) => {
+  const SessionId = IDL.Nat;
+  const Candidate = IDL.Record({
+    'usernameFragment' : IDL.Opt(IDL.Text),
+    'candidate' : IDL.Text,
+    'sdpMid' : IDL.Opt(IDL.Text),
+    'sdpMLineIndex' : IDL.Opt(IDL.Nat),
+  });
+  const Candidates = IDL.Vec(Candidate);
+  const UserId = IDL.Text;
+  const Offer = IDL.Record({ 'sdp' : IDL.Text, 'type' : IDL.Text });
+  
+  return IDL.Service({
+    'addBroadcasterCandidates' : IDL.Func([SessionId, Candidates], [], []),
+    'addViewerCandidates' : IDL.Func([SessionId, UserId, Candidates], [], []),
+    'getBroadcasterCandidates' : IDL.Func(
+        [SessionId, UserId],
+        [Candidates],
+        [],
+      ),
+    'getOffer' : IDL.Func([SessionId, UserId], [Offer], []),
+    'getViewerCandidates' : IDL.Func([SessionId, UserId], [Candidates], []),
+    'joinAsViewer' : IDL.Func([SessionId, UserId], [], []),
+    'sendAnswer' : IDL.Func([SessionId, UserId, Offer], [], []),
+    'shouldFinish' : IDL.Func([SessionId], [IDL.Bool], ['query']),
+    'startBroadcast' : IDL.Func([UserId, Offer], [], []),
+  });
+};
 
 export const init = ({ IDL }) => { return []; };

@@ -1,96 +1,105 @@
 {
   "kind": "build_request",
-  "title": "Add in-app video recording, saving, and gallery playback/export",
+  "title": "Add basic live online broadcast (WebRTC) with canister-based signaling",
   "priority": "normal",
   "requirements": [
     {
-      "id": "REQ-20",
-      "text": "Add a Video capture mode to the Camera screen that records video from the live camera preview using browser recording capabilities (e.g., MediaRecorder), with clear Start/Stop controls and recording state UI.",
+      "id": "REQ-24",
+      "text": "Add a new Live mode that allows a user to broadcast their camera stream to remote viewers over the internet using WebRTC peer connections, with clear in-app messaging that this is a basic peer-to-peer live feature (not a large-scale streaming platform).",
       "target": "frontend",
       "source": {
         "messageIds": [
-          "msg-6"
+          "recent-messages-5"
         ],
         "quotes": [
-          "saya ingin ada fitur video"
+          "saya ingin orang bisa live secara online, apakah bisa?"
         ]
       },
       "acceptanceCriteria": [
-        "On the Camera screen, the user can switch between Photo and Video capture modes.",
-        "In Video mode, the user can start recording and then stop recording, producing a playable recorded video.",
-        "While recording, the UI clearly indicates recording is active (e.g., red indicator and/or elapsed time), and prevents conflicting actions (e.g., photo countdown capture) as appropriate.",
-        "If video recording is not supported by the browser/device, the app shows a clear, user-friendly error message in English and does not crash."
+        "Camera screen provides a Live mode entry point distinct from Photo/Video capture.",
+        "Broadcaster can start a live session and sees a shareable session code/link.",
+        "UI displays connection status (e.g., waiting for viewers/connected/ended) and errors in a user-friendly way.",
+        "App copy shown to users is in English."
       ]
     },
     {
-      "id": "REQ-21",
-      "text": "Persist recorded videos locally in the browser (IndexedDB or equivalent) alongside existing photos so that videos remain available after refresh/reopen, including storage size calculation updates.",
-      "target": "frontend",
+      "id": "REQ-25",
+      "text": "Implement a backend signaling API in the single Motoko actor to support WebRTC session negotiation between one broadcaster and viewers via polling-based message exchange (offers/answers/ICE candidates), including session creation and session termination.",
+      "target": "backend",
       "source": {
         "messageIds": [
-          "msg-6"
+          "recent-messages-5"
         ],
         "quotes": [
-          "saya ingin ada fitur video"
+          "saya ingin orang bisa live secara online, apakah bisa?"
         ]
       },
       "acceptanceCriteria": [
-        "After stopping a recording, the user can save the video to the in-app gallery using the app’s existing save/gallery flow (or an equivalent explicit save action).",
-        "Recorded videos are stored locally and appear in the gallery after a page refresh.",
-        "The storage management UI continues to work and includes video storage in its space-used calculation.",
-        "Existing saved photos remain readable and are not lost after introducing video persistence."
+        "Backend exposes methods to: create a live session, join a live session, post signaling messages (SDP/ICE), fetch pending signaling messages, and end/cleanup a session.",
+        "Signaling data is treated as transient; no video bytes are stored or relayed by the canister.",
+        "API supports multiple sessions (at minimum, separate session IDs) and basic validation (session exists, session not ended)."
       ]
     },
     {
-      "id": "REQ-22",
-      "text": "Update the Gallery screen to support listing, previewing, and exporting recorded videos in addition to photos.",
+      "id": "REQ-26",
+      "text": "Add a Viewer experience in the frontend that lets someone open a session link or enter a session code, establishes a WebRTC connection to the broadcaster using the canister signaling API, and plays the live stream with standard HTML5 video playback UI.",
       "target": "frontend",
       "source": {
         "messageIds": [
-          "msg-6"
+          "recent-messages-5"
         ],
         "quotes": [
-          "saya ingin ada fitur video"
+          "saya ingin orang bisa live secara online, apakah bisa?"
         ]
       },
       "acceptanceCriteria": [
-        "The gallery grid displays video items distinctly from photos (e.g., a video badge/overlay).",
-        "Selecting a video opens a detail view that plays the video with standard controls (play/pause/seek/volume).",
-        "The user can export/download a recorded video file from the gallery.",
-        "The user can delete individual videos and “Clear All” removes both photos and videos."
+        "Viewer can join by session code and/or a shareable link generated by the broadcaster.",
+        "Viewer sees a live video element that starts playing after successful connection.",
+        "Viewer sees clear empty/loading/error states (e.g., invalid code, broadcaster offline, connection failed)."
       ]
     },
     {
-      "id": "REQ-23",
-      "text": "Update the in-app Help modal copy to mention how to record videos (switch to Video mode, start/stop recording, where videos are stored, and how to export them), in clear English.",
+      "id": "REQ-27",
+      "text": "Update the in-app Help modal to include a new section explaining Live mode (how to start a live session, share/join a code/link, what permissions are needed, and key limitations like peer-to-peer reliability and that the backend does not host the video).",
       "target": "frontend",
       "source": {
         "messageIds": [
-          "msg-6"
+          "recent-messages-5"
         ],
         "quotes": [
-          "saya ingin ada fitur video"
+          "saya ingin orang bisa live secara online, apakah bisa?"
         ]
       },
       "acceptanceCriteria": [
-        "Help content includes a section or updates existing sections to explain video recording start/stop and Video mode selection.",
-        "Help content explicitly states that videos are stored locally in the browser (consistent with existing photo storage messaging).",
-        "All new/updated help text is in English and matches the app’s tone/style."
+        "Help modal contains a clearly labeled 'Live' (or 'Live Streaming') section in English.",
+        "Help content describes: starting Live, sharing/joining code/link, and limitations (basic P2P, depends on network, not a scalable broadcast service)."
       ]
     }
   ],
   "constraints": [
-    "Frontend immutable paths must not be edited: frontend/src/hooks/useInternetIdentity.ts, frontend/src/hooks/useInternetIdentity.tsx, frontend/src/hooks/useActor.ts, frontend/src/main.tsx, frontend/src/components/ui.",
-    "Do not add external databases or third-party backend services; local persistence must remain browser-based (IndexedDB or equivalent).",
-    "Backend remains single-actor Motoko; do not introduce backend video byte storage unless explicitly requested later."
+    "Backend must remain a single Motoko actor in backend/main.mo; only add backend/migration.mo if an upgrade-safe state migration is required.",
+    "Do not modify files under frontend/src/components/ui or any paths listed as immutable in SYSTEM_CONTEXT.",
+    "Do not implement WebSockets or Socket.io; signaling must work without WebSockets (e.g., via polling).",
+    "Do not route or store live video bytes through the backend canister; the canister is for signaling only."
   ],
   "nonGoals": [
-    "Video editing features (filters on video, trimming, stitching, adding stickers/masks to video).",
-    "Uploading/storing video files on the backend canister.",
-    "Real-time streaming or WebSocket-based video features."
+    "RTMP/HLS/DASH broadcasting or any CDN-style scalable live streaming.",
+    "Recording live streams on the backend.",
+    "Third-party streaming integrations (YouTube/Twitch/etc.).",
+    "Multi-broadcaster studio features (scenes, overlays for live, chat)."
   ],
   "imageRequirements": {
     "required": [],
     "edits": []
+  },
+  "userProfileUpdate": {
+    "goalsToAdd": [],
+    "goalsToRemove": [],
+    "preferencesToAdd": [],
+    "preferencesToRemove": [],
+    "miscToAdd": [],
+    "miscToRemove": [],
+    "fieldsToSet": {},
+    "fieldsToDelete": []
   }
 }

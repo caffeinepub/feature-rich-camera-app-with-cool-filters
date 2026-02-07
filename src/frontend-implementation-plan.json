@@ -1,97 +1,93 @@
 {
   "kind": "implementation_plan",
   "version": "1.0",
-  "title": "Add in-app video recording with local persistence and gallery playback/export",
+  "title": "Basic WebRTC Live Broadcast (P2P) UI with Canister Signaling (Polling)",
   "requirements": [
     {
-      "id": "REQ-20",
-      "summary": "Add a Video capture mode on the Camera screen using browser recording (MediaRecorder) with Start/Stop controls, recording state UI, and graceful unsupported handling.",
+      "id": "REQ-24",
+      "summary": "Add a Live mode for broadcasting the user’s camera stream via basic peer-to-peer WebRTC, with in-app status/error messaging and a shareable session code/link.",
       "acceptanceCriteria": [
-        "On the Camera screen, the user can switch between Photo and Video capture modes.",
-        "In Video mode, the user can start recording and then stop recording, producing a playable recorded video.",
-        "While recording, the UI clearly indicates recording is active (e.g., red indicator and/or elapsed time), and prevents conflicting actions (e.g., photo countdown capture) as appropriate.",
-        "If video recording is not supported by the browser/device, the app shows a clear, user-friendly error message in English and does not crash."
+        "Camera screen provides a Live mode entry point distinct from Photo/Video capture.",
+        "Broadcaster can start a live session and sees a shareable session code/link.",
+        "UI displays connection status (e.g., waiting for viewers/connected/ended) and errors in a user-friendly way.",
+        "App copy shown to users is in English."
       ],
       "file_operations": [
         {
-          "path": "frontend/src/hooks/useVideoRecorder.ts",
+          "path": "frontend/src/pages/LiveBroadcastScreen.tsx",
           "operation": "create",
-          "description": "Create a dedicated React hook to manage MediaRecorder lifecycle (start/stop), chunk collection, elapsed-time tracking, and producing a playable Blob/URL from the live camera stream. Include capability checks for MediaRecorder support and clear error messages for unsupported environments."
+          "description": "Create the broadcaster Live UI: start/stop live session, show a clear disclaimer that this is a basic P2P live feature (not a scalable streaming platform), render connection status (waiting/connected/ended), present session code and shareable link with copy/share actions, and display user-friendly error states. Use the selected \"camera\" component’s useCamera hook for camera preview/stream access; verify the component's usage instructions before implementing."
         },
         {
-          "path": "frontend/src/pages/CameraScreen.tsx",
-          "operation": "modify",
-          "description": "Add Photo/Video mode switching and integrate video recording by reading the active camera stream from the existing camera preview (use the selected \"camera\" component hook useCamera for camera preview/stream access; verify the component's usage instructions before implementing). Wire Start/Stop recording actions, disable conflicting photo actions while recording (e.g., countdown/capture), and show a prominent recording state UI (red indicator + elapsed time). Display a user-friendly English error if MediaRecorder/video recording is unsupported."
+          "path": "frontend/src/hooks/live/useLiveBroadcast.ts",
+          "operation": "create",
+          "description": "Implement a broadcaster-side React hook to manage WebRTC RTCPeerConnection lifecycle, create/refresh offer, gather and post ICE candidates, poll canister signaling for viewer answers/candidates, and expose derived connection/status/error state for the LiveBroadcastScreen. Ensure polling-based signaling only (no WebSockets)."
+        },
+        {
+          "path": "frontend/src/lib/live/signaling.ts",
+          "operation": "create",
+          "description": "Add a small signaling client wrapper around the backend actor (from useActor) to standardize polling intervals, transient message handling (offer/answer/candidates), basic validation mapping (e.g., invalid/ended session), and conversion between browser RTCIceCandidate and the shared Candidate type used by the backend interface."
         },
         {
           "path": "frontend/src/components/camera/MobileCameraOverlay.tsx",
           "operation": "modify",
-          "description": "Extend the camera controls UI to support switching between Photo and Video modes and to show appropriate controls per mode (e.g., Start/Stop recording button in Video mode; photo shutter in Photo mode). Add a clear recording indicator and elapsed time display while recording, and ensure disabled states prevent conflicting interactions."
-        }
-      ]
-    },
-    {
-      "id": "REQ-21",
-      "summary": "Persist recorded videos locally in IndexedDB alongside photos, including updated storage size calculation and safe migration so existing photos remain readable.",
-      "acceptanceCriteria": [
-        "After stopping a recording, the user can save the video to the in-app gallery using the app’s existing save/gallery flow (or an equivalent explicit save action).",
-        "Recorded videos are stored locally and appear in the gallery after a page refresh.",
-        "The storage management UI continues to work and includes video storage in its space-used calculation.",
-        "Existing saved photos remain readable and are not lost after introducing video persistence."
-      ],
-      "file_operations": [
-        {
-          "path": "frontend/src/App.tsx",
-          "operation": "modify",
-          "description": "Add and export a Video media type (and/or a shared union type for gallery items) so videos can be represented consistently in storage and gallery without affecting existing photo editing flows."
-        },
-        {
-          "path": "frontend/src/lib/storage.ts",
-          "operation": "modify",
-          "description": "Extend IndexedDB helpers to also save/retrieve/delete/clear recorded videos in addition to existing photos. Add a safe DB version upgrade/migration strategy that keeps the existing photos store intact (or migrates without data loss). Update storage size calculation to include both photo data URLs and persisted video blobs so the gallery storage UI reflects total usage."
+          "description": "Extend the capture mode toggle to include a distinct \"Live\" mode entry alongside Photo/Video, with appropriate disabling while recording/live is active. Keep all labels/copy in English. Verify the component's usage instructions before implementing."
         },
         {
           "path": "frontend/src/pages/CameraScreen.tsx",
           "operation": "modify",
-          "description": "After stopping a recording, provide an explicit Save-to-Gallery action (e.g., preview + Save/Discard) that persists the recorded video via the updated storage helpers and then navigates to (or makes available in) the gallery."
+          "description": "Add a Live mode entry point in the camera experience distinct from Photo/Video (using the overlay toggle). When Live is selected, route the user into the broadcaster Live experience (LiveBroadcastScreen) while keeping the standard camera preview behavior. Use the selected \"camera\" component’s useCamera hook for preview/stream access; verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/App.tsx",
+          "operation": "modify",
+          "description": "Wire Live broadcast into app navigation state: introduce a Live screen state, render LiveBroadcastScreen when selected, and pass navigation callbacks from CameraScreen to enter/exit Live mode. Also ensure app-level URL handling can preserve/share a viewer link (without adding unrelated routes)."
         }
       ]
     },
     {
-      "id": "REQ-22",
-      "summary": "Update the Gallery screen to list photos and videos, show distinct video items, support video playback in detail view, enable download/export, and allow deleting/clearing all media.",
+      "id": "REQ-26",
+      "summary": "Add a Viewer experience to join a live session by code or link, connect via WebRTC using polling-based canister signaling, and play the stream in an HTML5 video element with clear states.",
       "acceptanceCriteria": [
-        "The gallery grid displays video items distinctly from photos (e.g., a video badge/overlay).",
-        "Selecting a video opens a detail view that plays the video with standard controls (play/pause/seek/volume).",
-        "The user can export/download a recorded video file from the gallery.",
-        "The user can delete individual videos and “Clear All” removes both photos and videos."
+        "Viewer can join by session code and/or a shareable link generated by the broadcaster.",
+        "Viewer sees a live video element that starts playing after successful connection.",
+        "Viewer sees clear empty/loading/error states (e.g., invalid code, broadcaster offline, connection failed)."
       ],
       "file_operations": [
         {
-          "path": "frontend/src/pages/GalleryScreen.tsx",
-          "operation": "modify",
-          "description": "Update gallery loading to combine photos and videos from local storage, sort together by timestamp, and render a mixed grid. Add a distinct visual treatment for video tiles (badge/overlay). Update the detail modal to conditionally render an HTML video player with standard controls for video items, and preserve existing photo detail behavior. Implement export/download for videos (Blob to downloadable file) and ensure delete and Clear All remove both photos and videos."
+          "path": "frontend/src/pages/LiveViewerScreen.tsx",
+          "operation": "create",
+          "description": "Create the viewer UI: session code input + join action, auto-join from a shareable link (e.g., query/hash-based), show loading/empty/error states (invalid code, broadcaster offline, connection failed), and render an HTML5 video element with standard controls once the remote stream is attached."
         },
         {
-          "path": "frontend/src/lib/storage.ts",
+          "path": "frontend/src/hooks/live/useLiveViewer.ts",
+          "operation": "create",
+          "description": "Implement a viewer-side React hook to create RTCPeerConnection, poll for the broadcaster offer, set remote description, create/send answer, exchange ICE candidates via polling-based signaling, and expose connection/status/error state used by LiveViewerScreen."
+        },
+        {
+          "path": "frontend/src/App.tsx",
           "operation": "modify",
-          "description": "Add/adjust helper functions used by the gallery for mixed-media listing (photos + videos), exporting support data (e.g., retrieving video blob/mime type), and unified delete/clear-all across both stores."
+          "description": "Wire LiveViewerScreen into the app: add a viewer screen state and implement link handling so opening a shareable live link in the app navigates directly to the viewer join flow (pre-filling session code and starting connection). Also provide navigation back to Camera/Gallery as appropriate."
+        },
+        {
+          "path": "frontend/src/pages/LiveBroadcastScreen.tsx",
+          "operation": "modify",
+          "description": "Ensure the broadcaster screen generates a shareable viewer link that the app can parse (e.g., includes a session code in URL query/hash) and that it is easy to copy/share. Show clear status text indicating when viewers are connected vs waiting."
         }
       ]
     },
     {
-      "id": "REQ-23",
-      "summary": "Update Help modal copy to explain how to record, where videos are stored locally, and how to export them, in clear English.",
+      "id": "REQ-27",
+      "summary": "Update the Help modal with an English Live section explaining how to start/join Live, required permissions, and key peer-to-peer limitations.",
       "acceptanceCriteria": [
-        "Help content includes a section or updates existing sections to explain video recording start/stop and Video mode selection.",
-        "Help content explicitly states that videos are stored locally in the browser (consistent with existing photo storage messaging).",
-        "All new/updated help text is in English and matches the app’s tone/style."
+        "Help modal contains a clearly labeled 'Live' (or 'Live Streaming') section in English.",
+        "Help content describes: starting Live, sharing/joining code/link, and limitations (basic P2P, depends on network, not a scalable broadcast service)."
       ],
       "file_operations": [
         {
           "path": "frontend/src/components/HelpModal.tsx",
           "operation": "modify",
-          "description": "Update Help modal sections to include clear English instructions for Video mode (switch to Video, Start/Stop recording), where recordings are stored (locally in the browser via IndexedDB), and how to export/download videos from the Gallery. Keep tone consistent with existing help copy."
+          "description": "Add a new Help section labeled \"Live\" / \"Live Streaming\" describing: how to start a Live broadcast, how to share the session code/link, how viewers join, required permissions (camera/microphone if applicable), and limitations (basic P2P reliability, network/NAT constraints, backend does not host/relay video bytes). Keep all copy in English."
         }
       ]
     }

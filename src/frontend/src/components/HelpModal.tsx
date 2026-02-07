@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { HelpCircle, Camera, Grid3x3, Sparkles, Download, Database, Smile, Video as VideoIcon } from 'lucide-react';
+import { HelpCircle, Camera, Grid3x3, Sparkles, Download, Database, Smile, Video as VideoIcon, Radio } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import {
   Dialog,
@@ -29,7 +29,7 @@ export default function HelpModal() {
         <DialogHeader>
           <DialogTitle className="text-2xl">Welcome to SnapStudio!</DialogTitle>
           <DialogDescription>
-            Your creative camera app with powerful filters, editing tools, and video recording
+            Your creative camera app with powerful filters, editing tools, video recording, and live streaming
           </DialogDescription>
         </DialogHeader>
         
@@ -58,6 +58,24 @@ export default function HelpModal() {
               <p className="text-sm text-muted-foreground pl-13">
                 Switch to Video mode to record videos. Tap the red button to start recording and tap again to stop. 
                 While recording, you'll see a timer and recording indicator. After stopping, preview your video and choose to save it to the gallery or discard it.
+              </p>
+            </div>
+
+            <div className="space-y-3">
+              <div className="flex items-center gap-3">
+                <div className="flex items-center justify-center w-10 h-10 rounded-lg bg-destructive/10">
+                  <Radio className="w-5 h-5 text-destructive" />
+                </div>
+                <h3 className="font-semibold text-lg">Live Streaming</h3>
+              </div>
+              <p className="text-sm text-muted-foreground pl-13">
+                <strong>Starting a Live Broadcast:</strong> Switch to Live mode and tap "Go Live" to start broadcasting. 
+                Share the session code or link with viewers so they can join your stream.
+                <br /><br />
+                <strong>Joining a Live Stream:</strong> Enter the session code shared by the broadcaster or open their shareable link to watch the live stream.
+                <br /><br />
+                <strong>Limitations:</strong> This is a basic peer-to-peer live streaming feature. Connection quality depends on both the broadcaster's and viewer's network conditions. 
+                It's not designed for large-scale broadcasts or professional streaming. NAT and firewall configurations may affect connectivity.
               </p>
             </div>
 
@@ -128,27 +146,14 @@ export default function HelpModal() {
 
             <div className="space-y-3">
               <div className="flex items-center gap-3">
-                <div className="flex items-center justify-center w-10 h-10 rounded-lg bg-secondary/10">
-                  <Grid3x3 className="w-5 h-5 text-secondary" />
+                <div className="flex items-center justify-center w-10 h-10 rounded-lg bg-muted/50">
+                  <Database className="w-5 h-5" />
                 </div>
-                <h3 className="font-semibold text-lg">Gallery Management</h3>
+                <h3 className="font-semibold text-lg">Gallery & Storage</h3>
               </div>
               <p className="text-sm text-muted-foreground pl-13">
-                View all your captured photos and videos in the gallery. Videos are marked with a play icon and duration badge. 
-                Click any photo to re-edit it, play videos with standard controls, delete unwanted items, or clear all media to free up space.
-              </p>
-            </div>
-
-            <div className="space-y-3">
-              <div className="flex items-center gap-3">
-                <div className="flex items-center justify-center w-10 h-10 rounded-lg bg-muted">
-                  <Database className="w-5 h-5 text-muted-foreground" />
-                </div>
-                <h3 className="font-semibold text-lg">Local Storage</h3>
-              </div>
-              <p className="text-sm text-muted-foreground pl-13">
-                All photos and videos are stored locally in your browser using IndexedDB. They persist across sessions 
-                but are only accessible on this device and browser. Clear your browser data to remove all media.
+                All your photos and videos are stored locally in your browser using IndexedDB. 
+                Your media stays private and is never uploaded to any server. You can view, edit, export, or delete items from the gallery at any time.
               </p>
             </div>
           </div>

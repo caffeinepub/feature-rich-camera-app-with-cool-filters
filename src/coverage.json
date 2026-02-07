@@ -1,61 +1,63 @@
 {
   "kind": "coverage_report",
   "version": "1.0",
-  "generatedAt": "2026-02-07T12:07:52.385Z",
+  "generatedAt": "2026-02-07T12:46:08.192Z",
   "sources": {
     "buildRequest": true,
     "implementationPlan": true
   },
   "requirements": {
     "total": 4,
-    "implemented": 4,
+    "implemented": 3,
     "items": [
       {
-        "id": "REQ-20",
-        "summary": "Add a Video capture mode to the Camera screen that records video from the live camera preview using browser recording capabilities (e.g., MediaRecorder), with clear Start/Stop controls and recording state UI.",
+        "id": "REQ-24",
+        "summary": "Add a new Live mode that allows a user to broadcast their camera stream to remote viewers over the internet using WebRTC peer connections, with clear in-app messaging that this is a basic peer-to-peer live feature (not a large-scale streaming platform).",
         "status": "implemented",
         "plannedFiles": [
-          "frontend/src/hooks/useVideoRecorder.ts",
+          "frontend/src/pages/LiveBroadcastScreen.tsx",
+          "frontend/src/hooks/live/useLiveBroadcast.ts",
+          "frontend/src/lib/live/signaling.ts",
+          "frontend/src/components/camera/MobileCameraOverlay.tsx",
           "frontend/src/pages/CameraScreen.tsx",
-          "frontend/src/components/camera/MobileCameraOverlay.tsx"
+          "frontend/src/App.tsx"
         ],
         "matchedFiles": [
-          "frontend/src/hooks/useVideoRecorder.ts",
+          "frontend/src/pages/LiveBroadcastScreen.tsx",
+          "frontend/src/hooks/live/useLiveBroadcast.ts",
+          "frontend/src/lib/live/signaling.ts",
+          "frontend/src/components/camera/MobileCameraOverlay.tsx",
           "frontend/src/pages/CameraScreen.tsx",
-          "frontend/src/components/camera/MobileCameraOverlay.tsx"
+          "frontend/src/App.tsx"
         ]
       },
       {
-        "id": "REQ-21",
-        "summary": "Persist recorded videos locally in the browser (IndexedDB or equivalent) alongside existing photos so that videos remain available after refresh/reopen, including storage size calculation updates.",
+        "id": "REQ-25",
+        "summary": "Implement a backend signaling API in the single Motoko actor to support WebRTC session negotiation between one broadcaster and viewers via polling-based message exchange (offers/answers/ICE candidates), including session creation and session termination.",
+        "status": "unknown",
+        "plannedFiles": [],
+        "matchedFiles": []
+      },
+      {
+        "id": "REQ-26",
+        "summary": "Add a Viewer experience in the frontend that lets someone open a session link or enter a session code, establishes a WebRTC connection to the broadcaster using the canister signaling API, and plays the live stream with standard HTML5 video playback UI.",
         "status": "implemented",
         "plannedFiles": [
+          "frontend/src/pages/LiveViewerScreen.tsx",
+          "frontend/src/hooks/live/useLiveViewer.ts",
           "frontend/src/App.tsx",
-          "frontend/src/lib/storage.ts",
-          "frontend/src/pages/CameraScreen.tsx"
+          "frontend/src/pages/LiveBroadcastScreen.tsx"
         ],
         "matchedFiles": [
+          "frontend/src/pages/LiveViewerScreen.tsx",
+          "frontend/src/hooks/live/useLiveViewer.ts",
           "frontend/src/App.tsx",
-          "frontend/src/lib/storage.ts",
-          "frontend/src/pages/CameraScreen.tsx"
+          "frontend/src/pages/LiveBroadcastScreen.tsx"
         ]
       },
       {
-        "id": "REQ-22",
-        "summary": "Update the Gallery screen to support listing, previewing, and exporting recorded videos in addition to photos.",
-        "status": "implemented",
-        "plannedFiles": [
-          "frontend/src/pages/GalleryScreen.tsx",
-          "frontend/src/lib/storage.ts"
-        ],
-        "matchedFiles": [
-          "frontend/src/pages/GalleryScreen.tsx",
-          "frontend/src/lib/storage.ts"
-        ]
-      },
-      {
-        "id": "REQ-23",
-        "summary": "Update the in-app Help modal copy to mention how to record videos (switch to Video mode, start/stop recording, where videos are stored, and how to export them), in clear English.",
+        "id": "REQ-27",
+        "summary": "Update the in-app Help modal to include a new section explaining Live mode (how to start a live session, share/join a code/link, what permissions are needed, and key limitations like peer-to-peer reliability and that the backend does not host the video).",
         "status": "implemented",
         "plannedFiles": [
           "frontend/src/components/HelpModal.tsx"
@@ -67,17 +69,25 @@
     ]
   },
   "changedFiles": [
+    "backend/main.mo",
+    "backend/migration.mo",
     "build-request.json",
     "feature_evidence.json",
     "frontend-file-summaries.txt",
     "frontend-implementation-plan.json",
     "frontend/src/App.tsx",
+    "frontend/src/backend.d.ts",
+    "frontend/src/backend.ts",
     "frontend/src/components/HelpModal.tsx",
     "frontend/src/components/camera/MobileCameraOverlay.tsx",
-    "frontend/src/hooks/useVideoRecorder.ts",
-    "frontend/src/lib/storage.ts",
+    "frontend/src/declarations/backend.did.d.ts",
+    "frontend/src/declarations/backend.did.js",
+    "frontend/src/hooks/live/useLiveBroadcast.ts",
+    "frontend/src/hooks/live/useLiveViewer.ts",
+    "frontend/src/lib/live/signaling.ts",
     "frontend/src/pages/CameraScreen.tsx",
-    "frontend/src/pages/GalleryScreen.tsx",
+    "frontend/src/pages/LiveBroadcastScreen.tsx",
+    "frontend/src/pages/LiveViewerScreen.tsx",
     "project_state.json",
     "scratch/component-selection.json",
     "spec.md",

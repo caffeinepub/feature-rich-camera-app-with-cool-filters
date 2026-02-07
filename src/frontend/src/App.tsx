@@ -6,9 +6,12 @@ import Footer from './components/Footer';
 import CameraScreen from './pages/CameraScreen';
 import EditorScreen from './pages/EditorScreen';
 import GalleryScreen from './pages/GalleryScreen';
+import LiveBroadcastScreen from './pages/LiveBroadcastScreen';
+import LiveViewerScreen from './pages/LiveViewerScreen';
 import HelpModal from './components/HelpModal';
+import { useEffect } from 'react';
 
-export type Screen = 'camera' | 'editor' | 'gallery';
+export type Screen = 'camera' | 'editor' | 'gallery' | 'live-broadcast' | 'live-viewer';
 
 export interface Photo {
   id: string;
@@ -47,6 +50,19 @@ function App() {
   const [currentScreen, setCurrentScreen] = useState<Screen>('camera');
   const [capturedPhoto, setCapturedPhoto] = useState<Photo | null>(null);
   const [editingPhoto, setEditingPhoto] = useState<Photo | null>(null);
+  const [viewerSessionCode, setViewerSessionCode] = useState<string | null>(null);
+
+  // Handle viewer link on mount
+  useEffect(() => {
+    const hash = window.location.hash;
+    if (hash.startsWith('#live-')) {
+      const sessionCode = hash.replace('#live-', '');
+      if (sessionCode) {
+        setViewerSessionCode(sessionCode);
+        setCurrentScreen('live-viewer');
+      }
+    }
+  }, []);
 
   const handlePhotoCapture = (photo: Photo) => {
     setCapturedPhoto(photo);
@@ -68,6 +84,27 @@ function App() {
     setCurrentScreen('gallery');
   };
 
+  const handleStartLive = () => {
+    setCurrentScreen('live-broadcast');
+  };
+
+  const handleEndLive = () => {
+    setCurrentScreen('camera');
+  };
+
+  const handleJoinLive = (sessionCode?: string) => {
+    if (sessionCode) {
+      setViewerSessionCode(sessionCode);
+    }
+    setCurrentScreen('live-viewer');
+  };
+
+  const handleExitViewer = () => {
+    setViewerSessionCode(null);
+    window.location.hash = '';
+    setCurrentScreen('camera');
+  };
+
   return (
     <ThemeProvider attribute="class" defaultTheme="dark" enableSystem>
       <div className="min-h-screen flex flex-col bg-background">
@@ -81,6 +118,7 @@ function App() {
             <CameraScreen 
               onPhotoCapture={handlePhotoCapture}
               onViewGallery={handleViewGallery}
+              onStartLive={handleStartLive}
             />
           )}
           
@@ -98,9 +136,22 @@ function App() {
               onBackToCamera={handleBackToCamera}
             />
           )}
+
+          {currentScreen === 'live-broadcast' && (
+            <LiveBroadcastScreen 
+              onEnd={handleEndLive}
+            />
+          )}
+
+          {currentScreen === 'live-viewer' && (
+            <LiveViewerScreen 
+              initialSessionCode={viewerSessionCode}
+              onExit={handleExitViewer}
+            />
+          )}
         </main>
         
-        {currentScreen !== 'camera' && <Footer />}
+        {currentScreen !== 'camera' && currentScreen !== 'live-broadcast' && currentScreen !== 'live-viewer' && <Footer />}
         <HelpModal />
         <Toaster />
       </div>

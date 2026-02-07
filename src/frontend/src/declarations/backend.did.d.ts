@@ -10,7 +10,30 @@ import type { ActorMethod } from '@icp-sdk/core/agent';
 import type { IDL } from '@icp-sdk/core/candid';
 import type { Principal } from '@icp-sdk/core/principal';
 
-export interface _SERVICE {}
+export interface Candidate {
+  'usernameFragment' : [] | [string],
+  'candidate' : string,
+  'sdpMid' : [] | [string],
+  'sdpMLineIndex' : [] | [bigint],
+}
+export type Candidates = Array<Candidate>;
+export interface Offer { 'sdp' : string, 'type' : string }
+export type SessionId = bigint;
+export type UserId = string;
+export interface _SERVICE {
+  'addBroadcasterCandidates' : ActorMethod<[SessionId, Candidates], undefined>,
+  'addViewerCandidates' : ActorMethod<
+    [SessionId, UserId, Candidates],
+    undefined
+  >,
+  'getBroadcasterCandidates' : ActorMethod<[SessionId, UserId], Candidates>,
+  'getOffer' : ActorMethod<[SessionId, UserId], Offer>,
+  'getViewerCandidates' : ActorMethod<[SessionId, UserId], Candidates>,
+  'joinAsViewer' : ActorMethod<[SessionId, UserId], undefined>,
+  'sendAnswer' : ActorMethod<[SessionId, UserId, Offer], undefined>,
+  'shouldFinish' : ActorMethod<[SessionId], boolean>,
+  'startBroadcast' : ActorMethod<[UserId, Offer], undefined>,
+}
 export declare const idlService: IDL.ServiceClass;
 export declare const idlInitArgs: IDL.Type[];
 export declare const idlFactory: IDL.InterfaceFactory;

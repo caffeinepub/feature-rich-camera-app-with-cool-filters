@@ -14,11 +14,12 @@ import MobileCameraOverlay from '../components/camera/MobileCameraOverlay';
 interface CameraScreenProps {
   onPhotoCapture: (photo: Photo) => void;
   onViewGallery: () => void;
+  onStartLive: () => void;
 }
 
-type CaptureMode = 'photo' | 'video';
+type CaptureMode = 'photo' | 'video' | 'live';
 
-export default function CameraScreen({ onPhotoCapture, onViewGallery }: CameraScreenProps) {
+export default function CameraScreen({ onPhotoCapture, onViewGallery, onStartLive }: CameraScreenProps) {
   const {
     isActive,
     isSupported,
@@ -151,6 +152,14 @@ export default function CameraScreen({ onPhotoCapture, onViewGallery }: CameraSc
     const success = await switchCamera();
     if (success) {
       toast.success('Camera switched');
+    }
+  };
+
+  const handleCaptureModeChange = (mode: CaptureMode) => {
+    if (mode === 'live') {
+      onStartLive();
+    } else {
+      setCaptureMode(mode);
     }
   };
 
@@ -321,7 +330,7 @@ export default function CameraScreen({ onPhotoCapture, onViewGallery }: CameraSc
           onMirrorToggle={() => setMirror(!mirror)}
           onZoomChange={setZoom}
           onViewGallery={onViewGallery}
-          onCaptureModeChange={setCaptureMode}
+          onCaptureModeChange={handleCaptureModeChange}
           isDesktop={true}
         />
       </div>
@@ -447,7 +456,7 @@ export default function CameraScreen({ onPhotoCapture, onViewGallery }: CameraSc
             onCapture={handleCaptureClick}
             onStartRecording={handleStartRecording}
             onStopRecording={handleStopRecording}
-            onCaptureModeChange={setCaptureMode}
+            onCaptureModeChange={handleCaptureModeChange}
             isDesktop={false}
           />
         )}
@@ -455,24 +464,22 @@ export default function CameraScreen({ onPhotoCapture, onViewGallery }: CameraSc
 
       {/* Video Preview Dialog */}
       <Dialog open={showVideoPreview} onOpenChange={setShowVideoPreview}>
-        <DialogContent className="max-w-3xl">
+        <DialogContent className="max-w-2xl">
           <DialogHeader>
             <DialogTitle>Video Preview</DialogTitle>
           </DialogHeader>
-          <div className="space-y-4">
-            {videoUrl && (
+          
+          {videoUrl && (
+            <div className="relative aspect-video bg-black rounded-lg overflow-hidden">
               <video
                 src={videoUrl}
                 controls
-                className="w-full rounded-lg bg-black"
-                style={{ maxHeight: '60vh' }}
+                className="w-full h-full"
               />
-            )}
-            <p className="text-sm text-muted-foreground">
-              Duration: {formatTime(elapsedTime)}
-            </p>
-          </div>
-          <DialogFooter>
+            </div>
+          )}
+
+          <DialogFooter className="gap-2">
             <Button variant="outline" onClick={handleDiscardVideo}>
               Discard
             </Button>

@@ -2,33 +2,15 @@
   "kind": "feature_evidence_report",
   "features": [
     {
-      "featureId": "feature-add-a-video-capture-mode-to-the-camera-screen-that-records-video-from-the-live-camera-preview-using-browser-recording-capabilities-e-g-mediarecorder-with-clear-start-stop-controls-and-recording-state-ui",
-      "featureTitle": "Add a Video capture mode to the Camera screen that records video from the live camera preview using browser recording capabilities (e.g., MediaRecorder), with clear Start/Stop controls and recording state UI.",
-      "files": [
-        "frontend/src/components/camera/MobileCameraOverlay.tsx",
-        "frontend/src/hooks/useVideoRecorder.ts",
-        "frontend/src/pages/CameraScreen.tsx"
-      ],
-      "components": [
-        "camera@1.0.0",
-        "core-infrastructure@1.0.2",
-        "shadcn-ui@1.0.0",
-        "build-template-react@1.0.0",
-        "initial-app@1.0.0",
-        "github-export-icp-cli@1.0.0"
-      ],
-      "testIds": [
-        "REQ-20"
-      ],
-      "confidence": "high"
-    },
-    {
-      "featureId": "feature-persist-recorded-videos-locally-in-the-browser-indexeddb-or-equivalent-alongside-existing-photos-so-that-videos-remain-available-after-refresh-reopen-including-storage-size-calculation-updates",
-      "featureTitle": "Persist recorded videos locally in the browser (IndexedDB or equivalent) alongside existing photos so that videos remain available after refresh/reopen, including storage size calculation updates.",
+      "featureId": "feature-add-a-new-live-mode-that-allows-a-user-to-broadcast-their-camera-stream-to-remote-viewers-over-the-internet-using-webrtc-peer-connections-with-clear-in-app-messaging-that-this-is-a-basic-peer-to-peer-live-feature-not-a-large-scale-streaming-platform",
+      "featureTitle": "Add a new Live mode that allows a user to broadcast their camera stream to remote viewers over the internet using WebRTC peer connections, with clear in-app messaging that this is a basic peer-to-peer live feature (not a large-scale streaming platform).",
       "files": [
         "frontend/src/App.tsx",
-        "frontend/src/lib/storage.ts",
-        "frontend/src/pages/CameraScreen.tsx"
+        "frontend/src/components/camera/MobileCameraOverlay.tsx",
+        "frontend/src/hooks/live/useLiveBroadcast.ts",
+        "frontend/src/lib/live/signaling.ts",
+        "frontend/src/pages/CameraScreen.tsx",
+        "frontend/src/pages/LiveBroadcastScreen.tsx"
       ],
       "components": [
         "camera@1.0.0",
@@ -39,16 +21,18 @@
         "github-export-icp-cli@1.0.0"
       ],
       "testIds": [
-        "REQ-21"
+        "REQ-24"
       ],
       "confidence": "high"
     },
     {
-      "featureId": "feature-update-the-gallery-screen-to-support-listing-previewing-and-exporting-recorded-videos-in-addition-to-photos",
-      "featureTitle": "Update the Gallery screen to support listing, previewing, and exporting recorded videos in addition to photos.",
+      "featureId": "feature-add-a-viewer-experience-in-the-frontend-that-lets-someone-open-a-session-link-or-enter-a-session-code-establishes-a-webrtc-connection-to-the-broadcaster-using-the-canister-signaling-api-and-plays-the-live-stream-with-standard-html5-video-playback-ui",
+      "featureTitle": "Add a Viewer experience in the frontend that lets someone open a session link or enter a session code, establishes a WebRTC connection to the broadcaster using the canister signaling API, and plays the live stream with standard HTML5 video playback UI.",
       "files": [
-        "frontend/src/lib/storage.ts",
-        "frontend/src/pages/GalleryScreen.tsx"
+        "frontend/src/App.tsx",
+        "frontend/src/hooks/live/useLiveViewer.ts",
+        "frontend/src/pages/LiveBroadcastScreen.tsx",
+        "frontend/src/pages/LiveViewerScreen.tsx"
       ],
       "components": [
         "camera@1.0.0",
@@ -59,13 +43,13 @@
         "github-export-icp-cli@1.0.0"
       ],
       "testIds": [
-        "REQ-22"
+        "REQ-26"
       ],
       "confidence": "high"
     },
     {
-      "featureId": "feature-update-the-in-app-help-modal-copy-to-mention-how-to-record-videos-switch-to-video-mode-start-stop-recording-where-videos-are-stored-and-how-to-export-them-in-clear-english",
-      "featureTitle": "Update the in-app Help modal copy to mention how to record videos (switch to Video mode, start/stop recording, where videos are stored, and how to export them), in clear English.",
+      "featureId": "feature-update-the-in-app-help-modal-to-include-a-new-section-explaining-live-mode-how-to-start-a-live-session-share-join-a-code-link-what-permissions-are-needed-and-key-limitations-like-peer-to-peer-reliability-and-that-the-backend-does-not-host-the-video",
+      "featureTitle": "Update the in-app Help modal to include a new section explaining Live mode (how to start a live session, share/join a code/link, what permissions are needed, and key limitations like peer-to-peer reliability and that the backend does not host the video).",
       "files": [
         "frontend/src/components/HelpModal.tsx"
       ],
@@ -78,7 +62,7 @@
         "github-export-icp-cli@1.0.0"
       ],
       "testIds": [
-        "REQ-23"
+        "REQ-27"
       ],
       "confidence": "high"
     }

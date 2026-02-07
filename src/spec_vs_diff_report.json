@@ -1,37 +1,79 @@
 {
   "kind": "spec_vs_diff_report",
   "version": "1.0",
-  "generatedAt": "2026-02-07T12:07:52.382Z",
-  "summary": "Diff implements in-app video recording (MediaRecorder hook + camera UI mode toggle), IndexedDB persistence for videos with storage size updates, gallery listing/playback/export/delete for videos alongside photos, and updated Help modal copy. Diff also introduces unrelated photo editing/beauty/mask enhancements not requested in the BuildRequest.",
-  "missing_requirements": [],
-  "hallucinated_features": [
+  "generatedAt": "2026-02-07T12:46:08.189Z",
+  "summary": "Live mode UI/screens and WebRTC hooks were added, plus a Motoko signaling API skeleton. However, the backend signaling API does not clearly meet the polling-based, multi-session, and lifecycle (end/cleanup + transient queued messages) requirements; session IDs appear hard-coded to 0. Several unrelated features (beauty filters, gallery/video storage changes) also appear in the diff summary without being requested.",
+  "missing_requirements": [
     {
-      "description": "Added/expanded photo editor features (Beauty tab with smoothing/whitening, and mask overlay controls) not requested in REQ-20..REQ-23.",
-      "reason": "BuildRequest scope is video recording/persistence/gallery/help updates; it explicitly lists video editing as a non-goal and does not request new photo editor capabilities.",
+      "id": "REQ-25",
+      "requirement": "Backend signaling API must support polling-based exchange (post/fetch pending SDP/ICE), session creation returning/using distinct session IDs, basic validation, and session termination/cleanup.",
+      "reason": "The backend API shown uses specific methods (startBroadcast/joinAsViewer/getOffer/sendAnswer and candidate getters/adders) but does not show a generic polling queue of pending signaling messages, does not show an explicit end/cleanup method exposed to clients, and appears to hard-code sessionId=0 (and frontend sets sessionId to 0), which conflicts with multi-session support and shareable distinct session IDs.",
       "evidence": [
-        "frontend-file-summaries.txt (EditorScreen described as including new Beauty tab and mask overlay controls)",
-        "frontend/src/App.tsx (Photo type includes new beauty and mask fields)",
-        "frontend/src/lib/filters.ts (described as adding applyBeauty)"
+        "backend/main.mo (startBroadcast sets sessionId = 0; session stored with sessionId = 0; no returned session id; finishedSessions/shouldFinish present but no public end/cleanup method shown)",
+        "frontend/src/hooks/live/useLiveBroadcast.ts (\"sessionId is always 0 for now\" and sets newSessionId = BigInt(0))",
+        "frontend/src/lib/live/signaling.ts (methods mirror the specific backend calls; no postMessage/fetchPendingMessages abstraction)"
       ]
     },
     {
-      "description": "Added React Query backend integration hooks placeholder (useQueries) unrelated to video recording/persistence/gallery/help requirements.",
-      "reason": "BuildRequest constraints specify staying browser-based for persistence and do not request new backend integration work for this change.",
+      "id": "REQ-24",
+      "requirement": "Broadcaster can start a live session and sees a shareable session code/link (implying a real session identifier).",
+      "reason": "The broadcaster UI can copy/share a code/link, but the sessionId used appears to be a constant 0 rather than a newly created unique session ID from the backend.",
       "evidence": [
-        "frontend-file-summaries.txt (\"frontend/src/hooks/useQueries.ts\": React Query hooks for backend integration (placeholder for future metadata sync))"
+        "frontend/src/hooks/live/useLiveBroadcast.ts (\"sessionId is always 0 for now\"; sets sessionId BigInt(0))",
+        "frontend/src/pages/LiveBroadcastScreen.tsx (shareable link derived from sessionId; copy code/link uses sessionId)",
+        "backend/main.mo (session struct initialized with sessionId = 0)"
+      ]
+    },
+    {
+      "id": "REQ-26",
+      "requirement": "Viewer sees clear empty/loading/error states including invalid code and broadcaster offline.",
+      "reason": "Viewer screen shows some states (e.g., \"Please enter a session code\" and renders an error alert), but the diff excerpt does not clearly demonstrate specific handling/messaging for invalid code vs broadcaster offline beyond generic failures, and backend traps use messages like \"Session not found\" without structured error handling shown in the viewer hook (truncated).",
+      "evidence": [
+        "frontend/src/pages/LiveViewerScreen.tsx (generic join failure toasts and error rendering)",
+        "backend/main.mo (joinAsViewer traps with \"Session not found\" / \"already finished\"; no typed errors shown)"
+      ]
+    }
+  ],
+  "hallucinated_features": [
+    {
+      "description": "Added/expanded Beauty effects and related editor UI beyond Live streaming scope.",
+      "reason": "Not requested in REQ-24 to REQ-27; the diff summary indicates new beauty functionality and tabs/sliders.",
+      "evidence": [
+        "frontend-file-summaries.txt (EditorScreen includes \"new Beauty tab\" and beauty sliders)",
+        "frontend-file-summaries.txt (frontend/src/lib/filters.ts mentions new applyBeauty function)"
+      ]
+    },
+    {
+      "description": "Expanded Gallery and storage to support video persistence/playback and IndexedDB migration changes beyond Live streaming scope.",
+      "reason": "Not requested in REQ-24 to REQ-27; the diff summary describes substantial gallery/video storage enhancements.",
+      "evidence": [
+        "frontend-file-summaries.txt (GalleryScreen: mixed photos and videos, video playback, duration badges)",
+        "frontend-file-summaries.txt (frontend/src/lib/storage.ts: separate stores for photos and videos, DB version 2 migration)"
+      ]
+    },
+    {
+      "description": "Added backend/migration.mo despite no demonstrated upgrade-safe state migration need.",
+      "reason": "Build constraints allow adding backend/migration.mo only if required for upgrade-safe migration; the added file is a no-op and the diff does not show a corresponding stable state migration requirement.",
+      "evidence": [
+        "backend/migration.mo (run returns {})",
+        "backend/main.mo (imports Migration and uses \"with migration = Migration.run\")"
       ]
     }
   ],
   "confidence": 0.72,
   "changed_files": [
+    "backend/main.mo",
+    "backend/migration.mo",
     "frontend-file-summaries.txt",
     "frontend/src/App.tsx",
     "frontend/src/components/HelpModal.tsx",
     "frontend/src/components/camera/MobileCameraOverlay.tsx",
-    "frontend/src/hooks/useVideoRecorder.ts",
-    "frontend/src/lib/storage.ts",
+    "frontend/src/hooks/live/useLiveBroadcast.ts",
+    "frontend/src/hooks/live/useLiveViewer.ts",
+    "frontend/src/lib/live/signaling.ts",
     "frontend/src/pages/CameraScreen.tsx",
-    "frontend/src/pages/GalleryScreen.tsx",
+    "frontend/src/pages/LiveBroadcastScreen.tsx",
+    "frontend/src/pages/LiveViewerScreen.tsx",
     "project_state.json"
   ]
 }

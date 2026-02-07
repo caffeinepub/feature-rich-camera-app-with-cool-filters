@@ -89,10 +89,219 @@ export class ExternalBlob {
         return this;
     }
 }
-export interface backendInterface {
+export type UserId = string;
+export type SessionId = bigint;
+export type Candidates = Array<Candidate>;
+export interface Candidate {
+    usernameFragment?: string;
+    candidate: string;
+    sdpMid?: string;
+    sdpMLineIndex?: bigint;
 }
+export interface Offer {
+    sdp: string;
+    type: string;
+}
+export interface backendInterface {
+    addBroadcasterCandidates(sessionId: SessionId, candidates: Candidates): Promise<void>;
+    addViewerCandidates(sessionId: SessionId, viewerId: UserId, candidates: Candidates): Promise<void>;
+    getBroadcasterCandidates(sessionId: SessionId, viewerId: UserId): Promise<Candidates>;
+    getOffer(sessionId: SessionId, viewerId: UserId): Promise<Offer>;
+    getViewerCandidates(sessionId: SessionId, viewerId: UserId): Promise<Candidates>;
+    joinAsViewer(sessionId: SessionId, viewerId: UserId): Promise<void>;
+    sendAnswer(sessionId: SessionId, viewerId: UserId, answer: Offer): Promise<void>;
+    shouldFinish(sessionId: SessionId): Promise<boolean>;
+    startBroadcast(broadcasterId: UserId, offer: Offer): Promise<void>;
+}
+import type { Candidate as _Candidate, Candidates as _Candidates } from "./declarations/backend.did.d.ts";
 export class Backend implements backendInterface {
     constructor(private actor: ActorSubclass<_SERVICE>, private _uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, private _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, private processError?: (error: unknown) => never){}
+    async addBroadcasterCandidates(arg0: SessionId, arg1: Candidates): Promise<void> {
+        if (this.processError) {
+            try {
+                const result = await this.actor.addBroadcasterCandidates(arg0, to_candid_Candidates_n1(this._uploadFile, this._downloadFile, arg1));
+                return result;
+            } catch (e) {
+                this.processError(e);
+                throw new Error("unreachable");
+            }
+        } else {
+            const result = await this.actor.addBroadcasterCandidates(arg0, to_candid_Candidates_n1(this._uploadFile, this._downloadFile, arg1));
+            return result;
+        }
+    }
+    async addViewerCandidates(arg0: SessionId, arg1: UserId, arg2: Candidates): Promise<void> {
+        if (this.processError) {
+            try {
+                const result = await this.actor.addViewerCandidates(arg0, arg1, to_candid_Candidates_n1(this._uploadFile, this._downloadFile, arg2));
+                return result;
+            } catch (e) {
+                this.processError(e);
+                throw new Error("unreachable");
+            }
+        } else {
+            const result = await this.actor.addViewerCandidates(arg0, arg1, to_candid_Candidates_n1(this._uploadFile, this._downloadFile, arg2));
+            return result;
+        }
+    }
+    async getBroadcasterCandidates(arg0: SessionId, arg1: UserId): Promise<Candidates> {
+        if (this.processError) {
+            try {
+                const result = await this.actor.getBroadcasterCandidates(arg0, arg1);
+                return from_candid_Candidates_n5(this._uploadFile, this._downloadFile, result);
+            } catch (e) {
+                this.processError(e);
+                throw new Error("unreachable");
+            }
+        } else {
+            const result = await this.actor.getBroadcasterCandidates(arg0, arg1);
+            return from_candid_Candidates_n5(this._uploadFile, this._downloadFile, result);
+        }
+    }
+    async getOffer(arg0: SessionId, arg1: UserId): Promise<Offer> {
+        if (this.processError) {
+            try {
+                const result = await this.actor.getOffer(arg0, arg1);
+                return result;
+            } catch (e) {
+                this.processError(e);
+                throw new Error("unreachable");
+            }
+        } else {
+            const result = await this.actor.getOffer(arg0, arg1);
+            return result;
+        }
+    }
+    async getViewerCandidates(arg0: SessionId, arg1: UserId): Promise<Candidates> {
+        if (this.processError) {
+            try {
+                const result = await this.actor.getViewerCandidates(arg0, arg1);
+                return from_candid_Candidates_n5(this._uploadFile, this._downloadFile, result);
+            } catch (e) {
+                this.processError(e);
+                throw new Error("unreachable");
+            }
+        } else {
+            const result = await this.actor.getViewerCandidates(arg0, arg1);
+            return from_candid_Candidates_n5(this._uploadFile, this._downloadFile, result);
+        }
+    }
+    async joinAsViewer(arg0: SessionId, arg1: UserId): Promise<void> {
+        if (this.processError) {
+            try {
+                const result = await this.actor.joinAsViewer(arg0, arg1);
+                return result;
+            } catch (e) {
+                this.processError(e);
+                throw new Error("unreachable");
+            }
+        } else {
+            const result = await this.actor.joinAsViewer(arg0, arg1);
+            return result;
+        }
+    }
+    async sendAnswer(arg0: SessionId, arg1: UserId, arg2: Offer): Promise<void> {
+        if (this.processError) {
+            try {
+                const result = await this.actor.sendAnswer(arg0, arg1, arg2);
+                return result;
+            } catch (e) {
+                this.processError(e);
+                throw new Error("unreachable");
+            }
+        } else {
+            const result = await this.actor.sendAnswer(arg0, arg1, arg2);
+            return result;
+        }
+    }
+    async shouldFinish(arg0: SessionId): Promise<boolean> {
+        if (this.processError) {
+            try {
+                const result = await this.actor.shouldFinish(arg0);
+                return result;
+            } catch (e) {
+                this.processError(e);
+                throw new Error("unreachable");
+            }
+        } else {
+            const result = await this.actor.shouldFinish(arg0);
+            return result;
+        }
+    }
+    async startBroadcast(arg0: UserId, arg1: Offer): Promise<void> {
+        if (this.processError) {
+            try {
+                const result = await this.actor.startBroadcast(arg0, arg1);
+                return result;
+            } catch (e) {
+                this.processError(e);
+                throw new Error("unreachable");
+            }
+        } else {
+            const result = await this.actor.startBroadcast(arg0, arg1);
+            return result;
+        }
+    }
+}
+function from_candid_Candidate_n7(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: _Candidate): Candidate {
+    return from_candid_record_n8(_uploadFile, _downloadFile, value);
+}
+function from_candid_Candidates_n5(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: _Candidates): Candidates {
+    return from_candid_vec_n6(_uploadFile, _downloadFile, value);
+}
+function from_candid_opt_n10(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: [] | [bigint]): bigint | null {
+    return value.length === 0 ? null : value[0];
+}
+function from_candid_opt_n9(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: [] | [string]): string | null {
+    return value.length === 0 ? null : value[0];
+}
+function from_candid_record_n8(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: {
+    usernameFragment: [] | [string];
+    candidate: string;
+    sdpMid: [] | [string];
+    sdpMLineIndex: [] | [bigint];
+}): {
+    usernameFragment?: string;
+    candidate: string;
+    sdpMid?: string;
+    sdpMLineIndex?: bigint;
+} {
+    return {
+        usernameFragment: record_opt_to_undefined(from_candid_opt_n9(_uploadFile, _downloadFile, value.usernameFragment)),
+        candidate: value.candidate,
+        sdpMid: record_opt_to_undefined(from_candid_opt_n9(_uploadFile, _downloadFile, value.sdpMid)),
+        sdpMLineIndex: record_opt_to_undefined(from_candid_opt_n10(_uploadFile, _downloadFile, value.sdpMLineIndex))
+    };
+}
+function from_candid_vec_n6(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: Array<_Candidate>): Array<Candidate> {
+    return value.map((x)=>from_candid_Candidate_n7(_uploadFile, _downloadFile, x));
+}
+function to_candid_Candidate_n3(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: Candidate): _Candidate {
+    return to_candid_record_n4(_uploadFile, _downloadFile, value);
+}
+function to_candid_Candidates_n1(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: Candidates): _Candidates {
+    return to_candid_vec_n2(_uploadFile, _downloadFile, value);
+}
+function to_candid_record_n4(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: {
+    usernameFragment?: string;
+    candidate: string;
+    sdpMid?: string;
+    sdpMLineIndex?: bigint;
+}): {
+    usernameFragment: [] | [string];
+    candidate: string;
+    sdpMid: [] | [string];
+    sdpMLineIndex: [] | [bigint];
+} {
+    return {
+        usernameFragment: value.usernameFragment ? candid_some(value.usernameFragment) : candid_none(),
+        candidate: value.candidate,
+        sdpMid: value.sdpMid ? candid_some(value.sdpMid) : candid_none(),
+        sdpMLineIndex: value.sdpMLineIndex ? candid_some(value.sdpMLineIndex) : candid_none()
+    };
+}
+function to_candid_vec_n2(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: Array<Candidate>): Array<_Candidate> {
+    return value.map((x)=>to_candid_Candidate_n3(_uploadFile, _downloadFile, x));
 }
 export interface CreateActorOptions {
     agent?: Agent;

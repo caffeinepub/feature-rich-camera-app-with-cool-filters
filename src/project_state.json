@@ -1,6 +1,6 @@
 {
   "schemaVersion": "1.0.0",
-  "projectStateVersion": 11,
+  "projectStateVersion": 13,
   "summary": "Build a camera application with many features, cool filters, and support for video recording.",
   "architectural_notes": [],
   "known_issues": [],
@@ -181,6 +181,30 @@
         "REQ-23"
       ],
       "version": 1
+    },
+    {
+      "id": "feature-add-a-new-live-mode-that-allows-a-user-to-broadcast-their-camera-stream-to-remote-viewers-over-the-internet-using-webrtc-peer-connections-with-clear-in-app-messaging-that-this-is-a-basic-peer-to-peer-live-feature-not-a-large-scale-streaming-platform",
+      "title": "Add a new Live mode that allows a user to broadcast their camera stream to remote viewers over the internet using WebRTC peer connections, with clear in-app messaging that this is a basic peer-to-peer live feature (not a large-scale streaming platform).",
+      "reqIds": [
+        "REQ-24"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-add-a-viewer-experience-in-the-frontend-that-lets-someone-open-a-session-link-or-enter-a-session-code-establishes-a-webrtc-connection-to-the-broadcaster-using-the-canister-signaling-api-and-plays-the-live-stream-with-standard-html5-video-playback-ui",
+      "title": "Add a Viewer experience in the frontend that lets someone open a session link or enter a session code, establishes a WebRTC connection to the broadcaster using the canister signaling API, and plays the live stream with standard HTML5 video playback UI.",
+      "reqIds": [
+        "REQ-26"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-update-the-in-app-help-modal-to-include-a-new-section-explaining-live-mode-how-to-start-a-live-session-share-join-a-code-link-what-permissions-are-needed-and-key-limitations-like-peer-to-peer-reliability-and-that-the-backend-does-not-host-the-video",
+      "title": "Update the in-app Help modal to include a new section explaining Live mode (how to start a live session, share/join a code/link, what permissions are needed, and key limitations like peer-to-peer reliability and that the backend does not host the video).",
+      "reqIds": [
+        "REQ-27"
+      ],
+      "version": 1
     }
   ],
   "new_feature_requests": [
@@ -214,6 +238,20 @@
       "id": "AR-11",
       "summary": "Add a video feature (record video from the live camera preview, with basic start/stop controls and saving/exporting).",
       "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-12",
+      "summary": "Add a live online streaming feature so users can broadcast live video to viewers over the internet.",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-14",
+      "summary": "Implement a backend signaling API in the single Motoko actor to support WebRTC session negotiation between one broadcaster and viewers via polling-based message exchange (offers/answers/ICE candidates), including session creation and session termination.",
+      "reqIds": [
+        "REQ-25"
+      ],
       "status": "pending"
     }
   ],
